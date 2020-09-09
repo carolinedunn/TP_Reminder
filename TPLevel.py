@@ -6,9 +6,10 @@ import time
 import requests
 from datetime import datetime
 
-intervalTime = 1800 #only check TP level every 30 minutes 
-#intervalTime = 5 #test every 5 seconds
-endHour = 22 #don't send email after 10 pm
+emptyDist = 17 # Distance to trigger TP holder empty email
+intervalTime = 1800 # Check TP level every 30 minutes 
+#intervalTime = 5 # test every 5 seconds
+endHour = 22 #don't send emails after 10 pm
 startHour = 8 #don't send emails before 8 am
 
 #function for setting up emails
@@ -77,7 +78,7 @@ try:
             end = str(endHour)
             start = str(startHour)
             print ("Don't send emails after "+ end +":00 or before "+start+":00.")
-        elif olddist > 5 and newdist > 5 and n == 0:
+        elif olddist > emptyDist and newdist > emptyDist and n == 0:
             print("Time to change the toilet paper. Round 1")
             n=1 #reminder counter
             dateraw= datetime.now() #get date/time when we fist noticed TP was empty
@@ -86,7 +87,7 @@ try:
             r = str(n)     #make n a string for printing purposes       
             request = send_simple_message(TPempty, r)
             print ('Status Code: '+format(request.status_code))
-        elif olddist > 5 and newdist > 5 and n > 0:
+        elif olddist > emptyDist and newdist > emptyDist and n > 0:
             n +=1       #increment reminder counter
             print("Toilet paper empty as of " + TPempty) #print the original date/time when TP was first empty
             r = str(n) #make n a string for printing purposes
