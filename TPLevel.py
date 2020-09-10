@@ -73,6 +73,8 @@ try:
         print ("Measured Distance = %.1f in" % olddist)
         time.sleep(intervalTime)
         newdist = distance()
+        currenttime = datetime.now() #get updated time
+        hour = currenttime.hour #get current hour
         print ("Measured Distance = %.1f in" % newdist)
         if hour > endHour or hour < startHour:
             end = str(endHour)
@@ -98,8 +100,6 @@ try:
             print("Toilet paper level ok.")
             n = 0 #reset counter to zero
         time.sleep(intervalTime)
-        currenttime = datetime.now() #get updated time
-        hour = currenttime.hour #get current hour
 
 except KeyboardInterrupt:
     print ("Quit")
