@@ -24,7 +24,7 @@ def send_simple_message(TPempty, n):
 
 #GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BCM)
-
+GPIO.setwarnings(False)
 #set GPIO Pins
 GPIO_TRIGGER = 18
 GPIO_ECHO = 24
