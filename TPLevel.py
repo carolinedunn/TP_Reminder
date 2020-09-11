@@ -88,8 +88,8 @@ try:
             TPempty = dateraw.strftime("%-m/%-d at %-I:%M %p") # format and save the date/time when we first noticed the TP was empty
             print("Toilet paper empty as of " + TPempty)
             r = str(n)     #make n a string for printing purposes       
-            request = send_simple_message(TPempty, r). #Send an email to let the user know TP Holder is Empty
-            print ('Status Code: '+format(request.status_code)). #200 status code means email sent successfully
+            request = send_simple_message(TPempty, r) #Send an email to let the user know TP Holder is Empty
+            print ('Status Code: '+format(request.status_code)) #200 status code means email sent successfully
         elif olddist > emptyDist and newdist > emptyDist and n > 0:
             n +=1       #increment reminder counter
             print("Toilet paper empty as of " + TPempty) #print the original date/time when TP was first empty
