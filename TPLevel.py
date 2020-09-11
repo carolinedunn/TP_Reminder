@@ -56,7 +56,7 @@ def distance():
     TimeElapsed = StopTime - StartTime
     # multiply with the sonic speed (34300 cm/s)
     # and divide by 2, because there and back
-    distance = ((TimeElapsed * 34300) / 2) * 0.393701
+    distance = ((TimeElapsed * 34300) / 2) * 0.393701 # distance in inches
 
     return distance
 
@@ -69,26 +69,27 @@ hour = currenttime.hour
 try:
 
     while True:
-        olddist = distance()
-        print ("Measured Distance = %.1f in" % olddist)
-        time.sleep(intervalTime)
-        newdist = distance()
+        olddist = distance() # Measure TP distance 
+        print ("Measured Distance = %.1f in" % olddist) #print distance
+        time.sleep(intervalTime) # Wait 30 minutes
+        newdist = distance() # Measure TP distance Again
+        print ("Measured Distance = %.1f in" % newdist) #print new distance
         currenttime = datetime.now() #get updated time
         hour = currenttime.hour #get current hour
-        print ("Measured Distance = %.1f in" % newdist)
-        if hour > endHour or hour < startHour:
-            end = str(endHour)
-            start = str(startHour)
-            print ("Don't send emails after "+ end +":00 or before "+start+":00.")
-        elif olddist > emptyDist and newdist > emptyDist and n == 0:
+
+        if hour > endHour or hour < startHour: #Check for Do Not Disturb hours.
+            end = str(endHour) #Format endHour as a string for printing
+            start = str(startHour) #Format startHour as a string for printing
+            print ("Don't send emails after "+ end +":00 or before "+start+":00.") #If within Do Not Disturb hours, then do nothing.
+        elif olddist > emptyDist and newdist > emptyDist and n == 0: # Check if both distances measured show TP holder as empty for the first time.
             print("Time to change the toilet paper. Round 1")
-            n=1 #reminder counter
+            n=1 #reminder counter  #This is the 1st time TP empty observed
             dateraw= datetime.now() #get date/time when we fist noticed TP was empty
             TPempty = dateraw.strftime("%-m/%-d at %-I:%M %p") # format and save the date/time when we first noticed the TP was empty
             print("Toilet paper empty as of " + TPempty)
             r = str(n)     #make n a string for printing purposes       
-            request = send_simple_message(TPempty, r)
-            print ('Status Code: '+format(request.status_code))
+            request = send_simple_message(TPempty, r). #Send an email to let the user know TP Holder is Empty
+            print ('Status Code: '+format(request.status_code)). #200 status code means email sent successfully
         elif olddist > emptyDist and newdist > emptyDist and n > 0:
             n +=1       #increment reminder counter
             print("Toilet paper empty as of " + TPempty) #print the original date/time when TP was first empty
@@ -97,9 +98,9 @@ try:
             request = send_simple_message(TPempty, r) #send an email with the original TP date/time empty and number of reminders
             print ('Status Code: '+format(request.status_code)) #200 status code means email sent successfully
         else:
-            print("Toilet paper level ok.")
-            n = 0 #reset counter to zero
-        time.sleep(intervalTime)
+            print("Toilet paper level ok.") #At least 1 distance measured olddist or newdist or both distances measured show that TP holder is not empty.
+            n = 0 #reset counter to zero 
+        time.sleep(intervalTime) # Wait 30 minutes before measuring again
 
 except KeyboardInterrupt:
     print ("Quit")
